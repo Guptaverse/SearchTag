@@ -27,14 +27,27 @@ const App = () => {
     setPeopleList([...peopleList, tag]);
   };
 
-  // useEffect(() => {
-  // }, [peopleList]);
+  const handleBackspace = (e) => {
+    if (e.key === 'Backspace' && inputValue === '') {
+      const lastTag = selectedTags[selectedTags.length - 1];
+      if (lastTag) {
+        handleTagRemoval(lastTag);
+      }
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleBackspace);
+    return () => {
+      window.removeEventListener('keydown', handleBackspace);
+    };
+  }, [selectedTags]);
 
   return (
     <div className="App">
       <div className="tag-container">
         {selectedTags.map((tag, index) => (
-          <Tag key={index} person={tag} onRemove={handleTagRemoval} />
+          <Tag key={index} person={tag} onRemove={() => handleTagRemoval(tag)} />
         ))}
         <input
           type="text"
